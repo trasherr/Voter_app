@@ -2,16 +2,18 @@ package com.rkgit.voter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Button;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        String[] candidates = new String[20];
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         activity_main();
@@ -48,9 +50,28 @@ public class MainActivity extends AppCompatActivity {
         admin_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setContentView(R.layout.admin_loggedin);
-                admin_loggedin();
+                EditText id,password;
+                String uname,passwd;
+                id = findViewById(R.id.uname);
+                password = findViewById(R.id.Password);
+                uname=id.getText().toString();
+                passwd=password.getText().toString();
 
+                if (uname.equals("test") && passwd.equals("password")){
+                    setContentView(R.layout.admin_loggedin);
+                    admin_loggedin();
+                }
+                if (uname.isEmpty() || passwd.isEmpty())
+                {
+                    Toast.makeText(MainActivity.this,"Please enter credentials !",Toast.LENGTH_SHORT);
+
+                }
+                if (uname.length()<3 || passwd.length()<8) {
+                    Toast.makeText(MainActivity.this,"ID or Password is too short !",Toast.LENGTH_SHORT);
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Incorrect ID or Password", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -65,16 +86,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void admin_loggedin(){
-        ImageButton cross_button;
-        cross_button = findViewById(R.id.cross_button);
+        Button add_button;
 
-        cross_button.setOnClickListener(new View.OnClickListener() {
+        add_button = findViewById(R.id.add_candidate);
+        add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setContentView(R.layout.admin_layout);
-                admin_layout();
 
             }
         });
+
     }
 }
