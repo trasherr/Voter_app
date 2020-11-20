@@ -34,7 +34,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <EditText
-        android:id="@+id/uname2"
+        android:id="@+id/candidate_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <EditText
-        android:id="@+id/uname3"
+        android:id="@+id/_slogan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -74,7 +74,7 @@
         app:layout_constraintVertical_bias="0.118" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/add_details"
         android:layout_width="113dp"
         android:layout_height="48dp"
         android:layout_marginTop="252dp"
