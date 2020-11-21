@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/total_vote_casted"
+        android:layout_width="336dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="48dp"
+        android:text="Total Vote Casted :"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.32"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Max_vote_candidate"
+        android:layout_width="360dp"
+        android:layout_height="71dp"
+        android:layout_marginTop="16dp"
+        android:text="Candidated with Max votes :"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/total_time" />
+
+    <TextView
+        android:id="@+id/total_time"
+        android:layout_width="336dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="16dp"
+        android:text="Total Time :"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.32"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/total_vote_casted" />
+
+    <ScrollView
+        android:layout_width="364dp"
+        android:layout_height="483dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Max_vote_candidate">
+
+        <LinearLayout
+            android:id="@+id/result_layout_container_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/result_button1"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button2"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button3"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button4"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button5"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button6"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button7"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button8"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button9"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button10"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button11"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button12"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button13"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button14"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button15"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button16"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button17"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button18"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button19"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/result_button20"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Button" />
+        </LinearLayout>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="43dp"
+        android:layout_height="53dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.043"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/circle_cropped" />
+
+    <Button
+        android:id="@+id/result_back"
+        android:layout_width="41dp"
+        android:layout_height="55dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

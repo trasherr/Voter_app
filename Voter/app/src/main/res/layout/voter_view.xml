@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="211dp"
+        tools:layout_editor_absoluteY="205dp">
+
+        <LinearLayout
+            android:id="@+id/voter_layout_container_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/candidate_button1"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button2"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button3"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button4"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button5"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button6"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button7"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button8"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button9"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button10"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button11"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button12"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button13"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button14"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button15"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button16"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button17"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button18"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button19"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/candidate_button20"
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:text="Button" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

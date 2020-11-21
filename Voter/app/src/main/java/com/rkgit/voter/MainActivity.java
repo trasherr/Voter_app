@@ -1,15 +1,15 @@
 package com.rkgit.voter;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Button;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private static byte no=0;
     private static int vote_casted=0;
     private static boolean election_start=false;
-    private static Date start_time = new Date();
+    private static Date start_time;
+    private static Date stop_time;
     private static  String password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +41,15 @@ public class MainActivity extends AppCompatActivity {
                 admin_layout();
             }
         });
-        if (election_start==false){
+        if (!election_start){
             voter.setVisibility(View.GONE);
         }
         else {
             voter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setContentView(R.layout.stop_election);
-                    stop_election();
+                    setContentView(R.layout.voter_view);
+                    voter();
                 }
             });
         }
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void admin_loggedin(){
-        if (election_start==false) {
+        if (!election_start) {
             Button add_button, start_election;
             Button[] candidates_button = new Button[20];
 
@@ -217,6 +218,10 @@ public class MainActivity extends AppCompatActivity {
         stop_election.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                election_start=false;
+                stop_time=new Date();
+                setContentView(R.layout.result_layout);
+                result();
 
             }
         });
@@ -230,4 +235,97 @@ public class MainActivity extends AppCompatActivity {
         stop_election();
     }
 
+    public void voter(){
+
+        Button[] voter_button = new Button[20];
+
+        ViewGroup layout_button = findViewById(R.id.voter_layout_container_buttons);
+        for (byte i = 0; i < 20; i++) {
+            voter_button[i] = findViewById(getResources().getIdentifier("candidate_button" + i, "id", this.getPackageName()));
+            View child = layout_button.getChildAt(i);
+            if (child instanceof Button) {
+                Button button = (Button) child;
+                if (i < no) {
+                    button.setText(candidates[i]);// +"\n" );//+ slogans[i]);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            byte j=0;
+                            for (String i : candidates){
+                                j++;
+                                if(i.equals(button.getText().toString()))
+                                    break;
+                            }
+                            votes[j-1]++;
+                            vote_casted++;
+                            setContentView(R.layout.activity_main);
+                            activity_main();
+                        }
+                    });
+
+                } else {
+                    button.setVisibility(View.GONE);
+                }
+            }
+        }
+
+    }
+
+    public void result(){
+
+        Button[] candidate_result = new Button[20];
+        Button result_back;
+        TextView total_vote_casted,max_vote_candidate,total_time;
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        int max=0;
+        String max_candidate="Candidated with Max votes : "+candidates[0]+" ("+votes[0]+")";
+
+        result_back=findViewById(R.id.result_back);
+        total_vote_casted=findViewById(R.id.total_vote_casted);
+        total_time=findViewById(R.id.total_time);
+        max_vote_candidate=findViewById(R.id.Max_vote_candidate);
+
+        total_vote_casted.setText("Total Vote Casted : "+vote_casted);
+
+       total_time.setText("Total Time :"+format.format(stop_time.getTime()-start_time.getTime()));
+
+        for (byte i = 0; i<no;i++){
+            if (votes[i]>max) {
+                max = votes[i];
+                max_candidate="Candidated with Max votes : "+candidates[i]+" ("+votes[i]+")";
+            }
+
+        }
+
+        max_vote_candidate.setText(max_candidate);
+
+        ViewGroup layout_button = findViewById(R.id.result_layout_container_buttons);
+        for (byte i = 0; i < 20; i++) {
+            candidate_result[i] = findViewById(getResources().getIdentifier("result_button" + i, "id", this.getPackageName()));
+            View child = layout_button.getChildAt(i);
+            if (child instanceof Button) {
+                Button button = (Button) child;
+                if (i < no) {
+                    button.setText(candidates[i]+"\nVotes : "+votes[i]);
+                } else {
+                    button.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        result_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,"Press again to go back !",Toast.LENGTH_SHORT).show();
+                result_back.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setContentView(R.layout.activity_main);
+                        activity_main();
+                    }
+                });
+            }
+        });
+
+    }
 }
