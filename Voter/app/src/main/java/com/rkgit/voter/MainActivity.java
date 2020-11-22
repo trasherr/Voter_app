@@ -8,9 +8,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
+import java.util.concurrent.TimeUnit;
 import java.util.Date;
+
 
 public class MainActivity extends AppCompatActivity {
     private static String[] candidates = new String[20];
@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private static int vote_casted=0;
     private static boolean election_start=false;
     private static Date start_time;
-    private static Date stop_time;
+
     private static  String password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void activity_main(){
+
         Button admin,voter;
         admin =  findViewById(R.id.Admin);
         voter =  findViewById(R.id.Voter);
@@ -45,11 +46,19 @@ public class MainActivity extends AppCompatActivity {
             voter.setVisibility(View.GONE);
         }
         else {
+            Date timer_s=new Date();
             voter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setContentView(R.layout.voter_view);
-                    voter();
+                    Date timer_e = new Date();
+                    long pause = timer_e.getTime()-timer_s.getTime();
+                    if(pause>10000) {
+                        setContentView(R.layout.voter_view);
+                        voter();
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this,"Wait for 10 Seconds to caste next vote",Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
@@ -219,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 election_start=false;
-                stop_time=new Date();
                 setContentView(R.layout.result_layout);
                 result();
 
@@ -260,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
                             vote_casted++;
                             setContentView(R.layout.activity_main);
                             activity_main();
+
                         }
                     });
 
@@ -275,8 +284,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button[] candidate_result = new Button[20];
         Button result_back;
+        Date stop_time = new Date();
         TextView total_vote_casted,max_vote_candidate,total_time;
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         int max=0;
         String max_candidate="Candidated with Max votes : "+candidates[0]+" ("+votes[0]+")";
 
@@ -287,7 +296,15 @@ public class MainActivity extends AppCompatActivity {
 
         total_vote_casted.setText("Total Vote Casted : "+vote_casted);
 
-       total_time.setText("Total Time :"+format.format(stop_time.getTime()-start_time.getTime()));
+        long difference_In_Time = stop_time.getTime() - start_time.getTime();
+
+        long difference_In_Seconds = TimeUnit.MILLISECONDS.toSeconds(difference_In_Time) % 60;
+
+        long difference_In_Minutes = TimeUnit.MILLISECONDS.toMinutes(difference_In_Time) % 60;
+
+        long difference_In_Hours = TimeUnit.MILLISECONDS.toHours(difference_In_Time) % 24;
+
+        total_time.setText("Total Time :"+difference_In_Hours+":"+difference_In_Minutes+":"+difference_In_Seconds);
 
         for (byte i = 0; i<no;i++){
             if (votes[i]>max) {
