@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
                         voter();
                     }
                     else {
-                        Toast.makeText(MainActivity.this,"Wait for 10 Seconds to caste next vote",Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this,"Wait for 10 Seconds to " +
+                                "caste next vote",Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -91,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
                     password = password_field.getText().toString();
 
                     if (password.length()<8)
-                        Toast.makeText(MainActivity.this,"The password must be atleast of 8 characters !",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this,"The password must be " +
+                                "atleast of 8 characters !",Toast.LENGTH_SHORT).show();
                     else
                         passwd=password;
                 }
@@ -112,15 +114,18 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if (passwd.isEmpty() && election_start)
                 {
-                    Toast.makeText(MainActivity.this,"Please enter the password !",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,"Please enter the password !",
+                            Toast.LENGTH_SHORT).show();
 
                 }
                 else if (passwd.length()<8 && election_start) {
-                    Toast.makeText(MainActivity.this,"Password is too short !",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,"Password is too short !",
+                            Toast.LENGTH_SHORT).show();
                 }
                 else {
                     if(election_start)
-                        Toast.makeText(MainActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Incorrect Password",
+                                Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -142,7 +147,8 @@ public class MainActivity extends AppCompatActivity {
 
             ViewGroup layout_button = findViewById(R.id.layout_container_buttons);
             for (byte i = 0; i < 20; i++) {
-                candidates_button[i] = findViewById(getResources().getIdentifier("button" + i, "id", this.getPackageName()));
+                candidates_button[i] = findViewById(getResources().getIdentifier("button" +
+                        i, "id", this.getPackageName()));
                 View child = layout_button.getChildAt(i);
                 if (child instanceof Button) {
                     Button button = (Button) child;
@@ -167,7 +173,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (no < 2)
-                        Toast.makeText(MainActivity.this, "There should be atleast 2 candidates !", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "There should be atleast 2 "+
+                                "candidates !", Toast.LENGTH_SHORT).show();
 
                     else
                         start_election();
@@ -199,7 +206,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 else{
-                    Toast.makeText(MainActivity.this,"No. of candidates has reached its limit\ncannot add any more !",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,"No. of candidates has reached " +
+                            "its limit\ncannot add any more !",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -249,7 +257,8 @@ public class MainActivity extends AppCompatActivity {
 
         ViewGroup layout_button = findViewById(R.id.voter_layout_container_buttons);
         for (byte i = 0; i < 20; i++) {
-            voter_button[i] = findViewById(getResources().getIdentifier("candidate_button" + i, "id", this.getPackageName()));
+            voter_button[i] = findViewById(getResources().getIdentifier("candidate_button" +
+                    i, "id", this.getPackageName()));
             View child = layout_button.getChildAt(i);
             if (child instanceof Button) {
                 Button button = (Button) child;
@@ -304,7 +313,8 @@ public class MainActivity extends AppCompatActivity {
 
         long difference_In_Hours = TimeUnit.MILLISECONDS.toHours(difference_In_Time) % 24;
 
-        total_time.setText("Total Time :"+difference_In_Hours+":"+difference_In_Minutes+":"+difference_In_Seconds);
+        total_time.setText("Total Time :"+difference_In_Hours+":"+difference_In_Minutes+":"+
+                difference_In_Seconds);
 
         for (byte i = 0; i<no;i++){
             if (votes[i]>max) {
@@ -318,7 +328,8 @@ public class MainActivity extends AppCompatActivity {
 
         ViewGroup layout_button = findViewById(R.id.result_layout_container_buttons);
         for (byte i = 0; i < 20; i++) {
-            candidate_result[i] = findViewById(getResources().getIdentifier("result_button" + i, "id", this.getPackageName()));
+            candidate_result[i] = findViewById(getResources().getIdentifier("result_button" +
+                    i, "id", this.getPackageName()));
             View child = layout_button.getChildAt(i);
             if (child instanceof Button) {
                 Button button = (Button) child;
@@ -333,10 +344,16 @@ public class MainActivity extends AppCompatActivity {
         result_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this,"Press again to go back !",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,"Press again to go back !",
+                        Toast.LENGTH_SHORT).show();
                 result_back.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        candidates = new String[20];
+                        slogans = new String[20];
+                        votes = new int[20];
+                        no=0;
+                        vote_casted=0;
                         setContentView(R.layout.activity_main);
                         activity_main();
                     }
