@@ -1,6 +1,13 @@
 package com.rkgit.voter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.SharedPreferences;
+import android.nfc.Tag;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Button;
@@ -8,30 +15,182 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
-    private static String[] candidates = new String[20];
-    private static String[] slogans = new String[20];
-    private static int[] votes = new int[20];
-    private static byte no=0;
-    private static int vote_casted=0;
-    private static boolean election_start=false;
-    private static Date start_time;
 
-    private static  String password;
-    @Override
+    private static final String PREFS = "shared_prefs";
+
+    private static boolean election_start;
+    private static String password;
+
+    List<MainData> dataList = new ArrayList<>();
+    List<Voter> dataList2 = new ArrayList<>();
+    LinearLayoutManager linearLayoutManager;
+    RoomDB database;
+    MainAdapter adapter;
+    VoterAdapter adapter2;
+
+
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        election_start = sharedPreferences.getBoolean("election",false);
+        password = sharedPreferences.getString("password","0x0");
+
         activity_main();
+    }
+
+    private int totalVotes(){
+
+        int sum = 0 ;
+
+        for (int i = 0 ; i < dataList.size() ; i++) {
+            sum = sum + dataList.get(i).getVotes();
+        }
+        return sum;
+    }
+
+    private int can_max_votes(){
+
+        int max = 0;
+        int max_index = 0;
+
+        for (int i = 0 ; i < dataList.size() ; i++) {
+            if (dataList.get(i).getVotes() > max)
+                max_index = i;
+        }
+        return max_index;
 
     }
-    public void activity_main(){
 
+    public void addVoter(){
+        setContentView(R.layout.voter_add);
+
+        EditText editText = findViewById(R.id.editTextTextPersonName);
+        Button bt_add,bt_exit,bt_submit;
+        bt_add = findViewById(R.id.button23);
+        bt_exit = findViewById(R.id.button25);
+        bt_submit = findViewById(R.id.bt_submit);
+
+        RecyclerView recyclerView =findViewById(R.id.recycler_view);
+
+        database = RoomDB.getInstance(this);
+        dataList2 = database.voterDoa().getAll();
+
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        adapter2 = new VoterAdapter(MainActivity.this, dataList2);
+        recyclerView.setAdapter(adapter2);
+
+        bt_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String sText = editText.getText().toString().trim();
+
+                if (!sText.equals("")){
+                    Voter data = new Voter();
+                    data.setVoter(sText);
+                    data.setVote(true);
+
+                    database.voterDoa().insert(data);
+
+                    editText.setText("");
+                    dataList2.clear();
+                    dataList2.addAll(database.voterDoa().getAll());
+                    adapter2.notifyDataSetChanged();
+                }
+            }
+        });
+
+        bt_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                database.voterDoa().reset(dataList2);
+
+                dataList2.clear();
+                dataList2.addAll(database.voterDoa().getAll());
+                adapter2.notifyDataSetChanged();
+            }
+        });
+
+        bt_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                admin_loggedin();
+            }
+        });
+
+
+    }
+
+    public void addCandidate(){
+
+        setContentView(R.layout.admin_add2);
+
+        EditText editText = findViewById(R.id.editTextTextPersonName);
+        Button bt_add,bt_exit,bt_submit;
+        bt_add = findViewById(R.id.button23);
+        bt_exit = findViewById(R.id.button25);
+        bt_submit = findViewById(R.id.bt_submit);
+
+        RecyclerView recyclerView =findViewById(R.id.recycler_view);
+
+        database = RoomDB.getInstance(this);
+        dataList = database.mainDao().getAll();
+
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        adapter = new MainAdapter(MainActivity.this, dataList);
+        recyclerView.setAdapter(adapter);
+
+         bt_add.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 String sText = editText.getText().toString().trim();
+
+                 if (!sText.equals("")){
+                     MainData data = new MainData();
+                     data.setCandidate(sText);
+
+                     database.mainDao().insert(data);
+
+                     editText.setText("");
+                     dataList.clear();
+                     dataList.addAll(database.mainDao().getAll());
+                     adapter.notifyDataSetChanged();
+                 }
+             }
+         });
+
+         bt_exit.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 database.mainDao().reset(dataList);
+
+                 dataList.clear();
+                 dataList.addAll(database.mainDao().getAll());
+                 adapter.notifyDataSetChanged();
+             }
+         });
+         
+         bt_submit.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 admin_loggedin();
+             }
+         });
+
+
+    }
+
+    public void activity_main(){
+        setContentView(R.layout.activity_main);
         Button admin,voter;
         admin =  findViewById(R.id.Admin);
         voter =  findViewById(R.id.Voter);
@@ -50,16 +209,10 @@ public class MainActivity extends AppCompatActivity {
             voter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Date timer_e = new Date();
-                    long pause = timer_e.getTime()-timer_s.getTime();
-                    if(pause>10000) {
-                        setContentView(R.layout.voter_view);
-                        voter();
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this,"Wait for 10 Seconds to " +
-                                "caste next vote",Toast.LENGTH_LONG).show();
-                    }
+
+
+                    voter();
+
                 }
             });
         }
@@ -91,41 +244,34 @@ public class MainActivity extends AppCompatActivity {
                 if (!election_start) {
                     password = password_field.getText().toString();
 
-                    if (password.length()<8)
-                        Toast.makeText(MainActivity.this,"The password must be " +
-                                "atleast of 8 characters !",Toast.LENGTH_SHORT).show();
-                    else
-                        passwd=password;
-                }
-
-                else{
-                    passwd=password_field.getText().toString();
-                }
-
-                if ( passwd.equals(password) ){
-                    if (!election_start) {
-                        setContentView(R.layout.admin_loggedin);
+                        SharedPreferences sharedPreferences = getSharedPreferences(PREFS,MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("password",password);
+                        editor.commit();
                         admin_loggedin();
-                    }
-                    else{
+
+                }
+
+                else {
+                    passwd = password_field.getText().toString();
+                    SharedPreferences sharedPreferences = getSharedPreferences(PREFS, MODE_PRIVATE);
+                    password = sharedPreferences.getString("password", "0x0");
+
+
+                    if (passwd.equals(password)) {
+
                         setContentView(R.layout.stop_election);
                         stop_election();
-                    }
-                }
-                else if (passwd.isEmpty() && election_start)
-                {
-                    Toast.makeText(MainActivity.this,"Please enter the password !",
-                            Toast.LENGTH_SHORT).show();
 
-                }
-                else if (passwd.length()<8 && election_start) {
-                    Toast.makeText(MainActivity.this,"Password is too short !",
-                            Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    if(election_start)
-                        Toast.makeText(MainActivity.this, "Incorrect Password",
+                    } else if (passwd.isEmpty()) {
+                        Toast.makeText(MainActivity.this, "Please enter the password !",
                                 Toast.LENGTH_SHORT).show();
+
+                    } else {
+
+                            Toast.makeText(MainActivity.this, "Incorrect Password",
+                                    Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -133,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setContentView(R.layout.activity_main);
+                
                 activity_main();
 
             }
@@ -141,9 +287,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void admin_loggedin(){
+        setContentView(R.layout.admin_loggedin);setContentView(R.layout.admin_loggedin);
+
+
+
         if (!election_start) {
-            Button add_button, start_election;
+            Button add_button1, start_election,add_button2;
             Button[] candidates_button = new Button[20];
+
 
             ViewGroup layout_button = findViewById(R.id.layout_container_buttons);
             for (byte i = 0; i < 20; i++) {
@@ -152,19 +303,18 @@ public class MainActivity extends AppCompatActivity {
                 View child = layout_button.getChildAt(i);
                 if (child instanceof Button) {
                     Button button = (Button) child;
-                    if (i < no) {
-                        button.setText(candidates[i]);
+                    if (i < dataList.size()) {
+                        button.setText(dataList.get(i).getCandidate());
                     } else {
                         button.setVisibility(View.GONE);
                     }
                 }
             }
-            add_button = findViewById(R.id.add_candidate);
-            add_button.setOnClickListener(new View.OnClickListener() {
+            add_button1 = findViewById(R.id.add_candidate);
+            add_button1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setContentView(R.layout.add_candidate);
-                    add_candidate();
+                    addCandidate();
                 }
             });
 
@@ -172,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
             start_election.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (no < 2)
+                    if (dataList.size() < 2)
                         Toast.makeText(MainActivity.this, "There should be atleast 2 "+
                                 "candidates !", Toast.LENGTH_SHORT).show();
 
@@ -181,52 +331,34 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
+            add_button2 = findViewById(R.id.add_voter);
+            add_button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addVoter();
+                }
+            });
         }
         else {
             setContentView(R.layout.stop_election);
             stop_election();
         }
     }
-    public void add_candidate(){
-
-        Button add_details = findViewById(R.id.add_details);
-        add_details.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText _slogan,candidate_name;
-                _slogan = findViewById(R.id._slogan);
-                candidate_name = findViewById((R.id.candidate_name));
-                if(no<=20) {
-                    candidates[no] = candidate_name.getText().toString();
-                    slogans[no] = _slogan.getText().toString();
-                    if (!slogans[no].isEmpty()) {
-                        no++;
-                        setContentView(R.layout.admin_loggedin);
-                        admin_loggedin();
-                    }
-                }
-                else{
-                    Toast.makeText(MainActivity.this,"No. of candidates has reached " +
-                            "its limit\ncannot add any more !",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-    }
 
     public void stop_election(){
         Button back,stop_election;
         TextView _votecasted,no_;
+
         _votecasted=findViewById(R.id._votecasted);
-        _votecasted.setText("Vote Casted : "+vote_casted);
+        _votecasted.setText("Vote Casted : ");
         no_=findViewById(R.id.no_);
-        no_.setText("No. of candidates : "+(no));
+        no_.setText("No. of candidates : "+(dataList.size()));
 
         back=findViewById(R.id.stop_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setContentView(R.layout.activity_main);
+                
                 activity_main();
             }
         });
@@ -236,6 +368,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 election_start=false;
+                SharedPreferences sharedPreferences = getSharedPreferences(PREFS,MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("election",false);
+                editor.commit();
                 setContentView(R.layout.result_layout);
                 result();
 
@@ -245,14 +381,65 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void start_election(){
-        start_time = new Date();
         setContentView(R.layout.stop_election);
         election_start=true;
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("election",true);
+        editor.commit();
         stop_election();
+
     }
 
     public void voter(){
 
+        setContentView(R.layout.voter_login);
+        Button cancel,submit;
+        EditText id;
+
+        cancel = findViewById(R.id.button21);
+        submit = findViewById(R.id.button);
+        id = findViewById(R.id.editTextTextPassword);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity_main();
+            }
+        });
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                for (int i = 0 ; i < dataList2.size() ; i++ ){
+                    if(id.getText().toString().equals(dataList2.get(i).getVoter())){
+
+                        if( dataList2.get(i).getVote()){
+                            dataList2.get(i).setVote(false);
+                            voterLoggedin();
+
+                        }
+                        else
+                            Toast.makeText(MainActivity.this,"You have already voted !",
+                                    Toast.LENGTH_SHORT).show();
+
+
+                    }
+                    else
+                    Toast.makeText(MainActivity.this,"Wrong id !",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+
+
+    }
+
+    public void voterLoggedin(){
+        setContentView(R.layout.voter_view);
         Button[] voter_button = new Button[20];
 
         ViewGroup layout_button = findViewById(R.id.voter_layout_container_buttons);
@@ -262,20 +449,19 @@ public class MainActivity extends AppCompatActivity {
             View child = layout_button.getChildAt(i);
             if (child instanceof Button) {
                 Button button = (Button) child;
-                if (i < no) {
-                    button.setText(candidates[i]);// +"\n" );//+ slogans[i]);
+                if (i < dataList.size()) {
+                    button.setText(dataList.get(i).getCandidate());
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            byte j=0;
-                            for (String i : candidates){
-                                j++;
-                                if(i.equals(button.getText().toString()))
+                            int i;
+                            for (i = 0 ; i<dataList.size() ; i++){
+
+                                if(dataList.get(i).getCandidate().equals(button.getText().toString()))
                                     break;
                             }
-                            votes[j-1]++;
-                            vote_casted++;
-                            setContentView(R.layout.activity_main);
+                            dataList.get(i).setVotes((dataList.get(i).getVotes()+1));
+
                             activity_main();
 
                         }
@@ -296,33 +482,15 @@ public class MainActivity extends AppCompatActivity {
         Date stop_time = new Date();
         TextView total_vote_casted,max_vote_candidate,total_time;
         int max=0;
-        String max_candidate="Candidated with Max votes : "+candidates[0]+" ("+votes[0]+")";
+        String max_candidate="Candidated with Max votes : " + dataList.get(can_max_votes()-1).getCandidate() ;
 
         result_back=findViewById(R.id.result_back);
         total_vote_casted=findViewById(R.id.total_vote_casted);
         total_time=findViewById(R.id.total_time);
         max_vote_candidate=findViewById(R.id.Max_vote_candidate);
 
-        total_vote_casted.setText("Total Vote Casted : "+vote_casted);
+        total_vote_casted.setText("Total Vote Casted : " + totalVotes());
 
-        long difference_In_Time = stop_time.getTime() - start_time.getTime();
-
-        long difference_In_Seconds = TimeUnit.MILLISECONDS.toSeconds(difference_In_Time) % 60;
-
-        long difference_In_Minutes = TimeUnit.MILLISECONDS.toMinutes(difference_In_Time) % 60;
-
-        long difference_In_Hours = TimeUnit.MILLISECONDS.toHours(difference_In_Time) % 24;
-
-        total_time.setText("Total Time :"+difference_In_Hours+":"+difference_In_Minutes+":"+
-                difference_In_Seconds);
-
-        for (byte i = 0; i<no;i++){
-            if (votes[i]>max) {
-                max = votes[i];
-                max_candidate="Candidated with Max votes : "+candidates[i]+" ("+votes[i]+")";
-            }
-
-        }
 
         max_vote_candidate.setText(max_candidate);
 
@@ -333,8 +501,8 @@ public class MainActivity extends AppCompatActivity {
             View child = layout_button.getChildAt(i);
             if (child instanceof Button) {
                 Button button = (Button) child;
-                if (i < no) {
-                    button.setText(candidates[i]+"\nVotes : "+votes[i]);
+                if (i < dataList.size()) {
+                    button.setText(dataList.get(i).getCandidate()+"\nVotes : "+dataList.get(i).getVotes());
                 } else {
                     button.setVisibility(View.GONE);
                 }
@@ -349,12 +517,11 @@ public class MainActivity extends AppCompatActivity {
                 result_back.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        candidates = new String[20];
-                        slogans = new String[20];
-                        votes = new int[20];
-                        no=0;
-                        vote_casted=0;
-                        setContentView(R.layout.activity_main);
+                        database.mainDao().reset(dataList);
+                        dataList.clear();
+                        dataList.addAll(database.mainDao().getAll());
+                        adapter.notifyDataSetChanged();
+                        
                         activity_main();
                     }
                 });
