@@ -1,13 +1,11 @@
 package com.rkgit.voter;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.SharedPreferences;
-import android.nfc.Tag;
-import android.preference.PreferenceManager;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Button;
@@ -15,9 +13,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+
+import io.reactivex.rxjava3.annotations.NonNull;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         election_start = sharedPreferences.getBoolean("election",false);
         password = sharedPreferences.getString("password","0x0");
+
 
         activity_main();
     }
@@ -126,6 +130,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        BottomNavigationView bottomNav = findViewById(R.id.nav_bar);
+
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()){
+
+                    case R.id.nav_admin:
+                        admin_layout();
+
+                        return true;
+
+                    case R.id.nav_voter:
+                        voter();
+                        return true;
+
+                    case R.id.nav_results:
+                        activity_main();
+                        return true;
+                }
+
+                return false;
+            }
+        });
 
     }
 
@@ -186,18 +215,51 @@ public class MainActivity extends AppCompatActivity {
              }
          });
 
+        BottomNavigationView bottomNav = findViewById(R.id.nav_bar);
+
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()){
+
+                    case R.id.nav_admin:
+                        admin_layout();
+
+                        return true;
+
+                    case R.id.nav_voter:
+                        voter();
+                        return true;
+
+                    case R.id.nav_results:
+                        activity_main();
+                        return true;
+                }
+
+                return false;
+            }
+        });
+
 
     }
 
     public void activity_main(){
+
+
+
+
         setContentView(R.layout.activity_main);
         Button admin,voter;
         admin =  findViewById(R.id.Admin);
         voter =  findViewById(R.id.Voter);
+
+
+
         admin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setContentView(R.layout.admin_layout);
+
                 admin_layout();
             }
         });
@@ -217,10 +279,42 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+
+        BottomNavigationView bottomNav = findViewById(R.id.nav_bar);
+
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()){
+
+                    case R.id.nav_admin:
+
+                        admin_layout();
+
+                        return true;
+
+                    case R.id.nav_voter:
+
+                        voter();
+                        return true;
+
+                    case R.id.nav_results:
+
+                        activity_main();
+                        return true;
+                }
+
+                return false;
+            }
+        });
+
     }
 
     public void admin_layout(){
 
+
+        setContentView(R.layout.admin_layout);
         Button admin_login,cancel;
         TextView login_text;
         login_text=findViewById(R.id.login_text);
@@ -260,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (passwd.equals(password)) {
 
-                        setContentView(R.layout.stop_election);
+
                         stop_election();
 
                     } else if (passwd.isEmpty()) {
@@ -284,10 +378,37 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+        BottomNavigationView bottomNav = findViewById(R.id.nav_bar);
+
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()){
+
+                    case R.id.nav_admin:
+                        admin_layout();
+
+                        return true;
+
+                    case R.id.nav_voter:
+                        voter();
+                        return true;
+
+                    case R.id.nav_results:
+                        activity_main();
+                        return true;
+                }
+
+                return false;
+            }
+        });
     }
 
     public void admin_loggedin(){
-        setContentView(R.layout.admin_loggedin);setContentView(R.layout.admin_loggedin);
+        setContentView(R.layout.admin_loggedin);
 
 
 
@@ -340,12 +461,41 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         else {
-            setContentView(R.layout.stop_election);
+
             stop_election();
         }
+
+
+        BottomNavigationView bottomNav = findViewById(R.id.nav_bar);
+
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()){
+
+                    case R.id.nav_admin:
+                        admin_layout();
+
+                        return true;
+
+                    case R.id.nav_voter:
+                        voter();
+                        return true;
+
+                    case R.id.nav_results:
+                        activity_main();
+                        return true;
+                }
+
+                return false;
+            }
+        });
     }
 
     public void stop_election(){
+
+        setContentView(R.layout.stop_election);
         Button back,stop_election;
         TextView _votecasted,no_;
 
@@ -372,16 +522,43 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("election",false);
                 editor.commit();
-                setContentView(R.layout.result_layout);
+
                 result();
 
+            }
+        });
+
+        BottomNavigationView bottomNav = findViewById(R.id.nav_bar);
+
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()){
+
+                    case R.id.nav_admin:
+                        item.setIcon(item.getItemId());
+                        admin_layout();
+
+                        return true;
+
+                    case R.id.nav_voter:
+                        voter();
+                        return true;
+
+                    case R.id.nav_results:
+                        activity_main();
+                        return true;
+                }
+
+                return false;
             }
         });
 
     }
 
     public void start_election(){
-        setContentView(R.layout.stop_election);
+
         election_start=true;
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS,MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -434,6 +611,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        BottomNavigationView bottomNav = findViewById(R.id.nav_bar);
+
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()){
+
+                    case R.id.nav_admin:
+                        admin_layout();
+
+                        return true;
+
+                    case R.id.nav_voter:
+                        voter();
+                        return true;
+
+                    case R.id.nav_results:
+                        activity_main();
+                        return true;
+                }
+
+                return false;
+            }
+        });
 
 
     }
@@ -473,9 +675,37 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        BottomNavigationView bottomNav = findViewById(R.id.nav_bar);
+
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()){
+
+                    case R.id.nav_admin:
+                        admin_layout();
+
+                        return true;
+
+                    case R.id.nav_voter:
+                        voter();
+                        return true;
+
+                    case R.id.nav_results:
+                        activity_main();
+                        return true;
+                }
+
+                return false;
+            }
+        });
+
     }
 
     public void result(){
+
+        setContentView(R.layout.result_layout);
 
         Button[] candidate_result = new Button[20];
         Button result_back;
@@ -507,6 +737,32 @@ public class MainActivity extends AppCompatActivity {
                     button.setVisibility(View.GONE);
                 }
             }
+
+            BottomNavigationView bottomNav = findViewById(R.id.nav_bar);
+
+            bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                    switch (item.getItemId()){
+
+                        case R.id.nav_admin:
+                            admin_layout();
+
+                            return true;
+
+                        case R.id.nav_voter:
+                            voter();
+                            return true;
+
+                        case R.id.nav_results:
+                            activity_main();
+                            return true;
+                    }
+
+                    return false;
+                }
+            });
         }
 
         result_back.setOnClickListener(new View.OnClickListener() {

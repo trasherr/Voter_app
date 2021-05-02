@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_admin"
+        android:icon="@drawable/admin_selector"
+        android:title="Admin"/>
+    <item
+        android:id="@+id/nav_voter"
+        android:icon="@drawable/home_selector"
+        android:title="Voter"/>
+    <item
+        android:id="@+id/nav_results"
+        android:icon="@drawable/result_selector"
+        android:title="Results"/>
+
+</menu>
